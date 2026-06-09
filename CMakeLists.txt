@@ -27,6 +27,7 @@ target_link_libraries(escuelamovil PRIVATE
     Qt6::Sql
 )
 
+# Enlace directo para que Qt6 inyecte tu AndroidManifest.xml de forma automática 👇
 set_property(TARGET escuelamovil PROPERTY
     QT_ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}"
 )
