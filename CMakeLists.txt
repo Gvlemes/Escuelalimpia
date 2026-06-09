@@ -10,10 +10,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Qml Quick Sql)
 
+# Creamos el ejecutable móvil nativo de forma limpia
 qt_add_executable(escuelamovil
     main.cpp
 )
 
+# Mapeamos el archivo de interfaz táctil responsivo
 qt_add_qml_module(escuelamovil
     URI escuelamovil
     VERSION 1.0
@@ -25,9 +27,4 @@ target_link_libraries(escuelamovil PRIVATE
     Qt6::Qml
     Qt6::Quick
     Qt6::Sql
-)
-
-# Instrucción obligatoria para que el empaquetador inyecte el manifiesto corregido 👇
-set_property(TARGET escuelamovil PROPERTY
-    QT_ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}"
 )
