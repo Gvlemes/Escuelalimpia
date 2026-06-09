@@ -37,7 +37,7 @@ jobs:
           target: 'android'
           arch: 'android_arm64_v8a'
 
-      # PASO CLAVE: Forzamos a CMake a compilar en /tmp/build_app para romper el bucle infinito
+      # PASO CONFIGURADO: Forzamos la compilación externa y la revisión exacta de build-tools 34.0.0
       - name: Configure CMake Externamente
         run: |
           cmake -B /tmp/build_app -G Ninja \
