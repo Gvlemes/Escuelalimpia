@@ -5,7 +5,6 @@
           android:versionName="1.0">
 
     <application android:label="Escuela Limpia" 
-                 android:icon="@mipmap/ic_launcher"
                  android:allowBackup="true"
                  android:hasCode="true">
                  
@@ -16,7 +15,6 @@
                   android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <!-- Línea corregida con su atributo 'name' obligatorio 👇 -->
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
