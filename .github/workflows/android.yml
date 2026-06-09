@@ -6,16 +6,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Descargar codigo de la App
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Instalar Qt6 y Herramientas Android
-        uses: jurplel/install-qt-action@v3
+        uses: jurplel/install-qt-action@v4
         with:
           version: '6.5.3'
           target: 'android'
 
       - name: Configurar e Inicializar Android SDK
-        uses: android-actions/setup-android@v2
+        uses: android-actions/setup-android@v3
 
       - name: Compilar Proyecto con CMake y generar APK
         run: |
@@ -26,7 +26,7 @@ jobs:
           make
 
       - name: Subir APK final para descargar
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: EscuelaLimpia-Android
           path: build/**/*.apk
