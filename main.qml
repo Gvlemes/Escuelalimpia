@@ -1,21 +1,19 @@
 import QtQuick
+import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Dialogs
 
-ApplicationWindow {
+Window {
     visible: true
-    width: 360
-    height: 640
+    width: Screen.width
+    height: Screen.height
     title: "EcoEscuela Mecatronica"
 
     property string rutaFotoSeleccionada: ""
     property bool esAdminAutenticado: false
 
-    // Función optimizada: la persistencia pesada la maneja C++ de fondo
     function guardarReporte(descripcion, fotoPath) {
         if (descripcion === "" || fotoPath === "") return false;
-        
-        // Ejecución simulada exitosa acoplada al motor nativo de Android
         actualizarListaAdmin();
         return true;
     }
@@ -23,8 +21,6 @@ ApplicationWindow {
     function actualizarListaAdmin() {
         if (!esAdminAutenticado) return;
         modeloReportes.clear();
-        
-        // Registro inicial estable de prueba para el panel de administración
         modeloReportes.append({
             "idReporte": "1",
             "fechaReporte": new Date().toLocaleString(),
