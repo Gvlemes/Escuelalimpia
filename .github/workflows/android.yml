@@ -51,13 +51,11 @@ jobs:
             -Dandroid_sdk_build_tools_revision="34.0.0" \
             -DCMAKE_BUILD_TYPE=Debug
 
-      # Forzamos las variables globales en la terminal antes de lanzar el empaquetador nativo de Qt6
+      # Inyectamos de forma estricta las rutas de Android en la misma línea del disparador de CMake 👇
       - name: Build Android APK Nativamente
         run: |
-          export ANDROID_SDK_ROOT=$ANDROID_HOME
-          export ANDROID_HOME=$ANDROID_HOME
           cmake --build build --target escuelamovil
-          cmake --build build --target apk
+          ANDROID_HOME=$ANDROID_HOME ANDROID_SDK_ROOT=$ANDROID_HOME cmake --build build --target apk
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
