@@ -59,6 +59,7 @@ jobs:
         run: |
           mkdir -p android
           mkdir -p build/android-build/libs/arm64-v8a
+          # Copia el binario directamente desde la raiz de build sin chocar con directorios
           cp build/libappecologia_arm64-v8a.so build/android-build/libs/arm64-v8a/
 
       - name: Fix Gradle Build Tools and Licenses
