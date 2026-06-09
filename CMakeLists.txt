@@ -8,26 +8,26 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Agregamos "Sql" de forma nativa para Android 👇
 find_package(Qt6 REQUIRED COMPONENTS Qml Quick Sql)
 
-add_executable(appecologia
+# Nombre de ejecutable completamente nuevo para romper el conflicto de directorios
+qt_add_executable(escuelamovil
     main.cpp
 )
 
-qt_add_qml_module(appecologia
-    URI appecologia
+qt_add_qml_module(escuelamovil
+    URI escuelamovil
     VERSION 1.0
     QML_FILES
         main.qml
 )
 
-target_link_libraries(appecologia PRIVATE 
+target_link_libraries(escuelamovil PRIVATE 
     Qt6::Qml
     Qt6::Quick
     Qt6::Sql
 )
 
-set_property(TARGET appecologia PROPERTY
+set_property(TARGET escuelamovil PROPERTY
     QT_ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}"
 )
