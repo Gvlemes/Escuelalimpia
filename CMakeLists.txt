@@ -10,19 +10,18 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Qml Quick)
 
-add_executable(EscuelaLimpiaApp
+add_executable(appecologia
     main.cpp
 )
 
-qt_add_qml_module(EscuelaLimpiaApp
-    URI EscuelaLimpiaApp
+qt_add_qml_module(appecologia
+    URI appecologia
     VERSION 1.0
     QML_FILES
         main.qml
 )
 
-target_link_libraries(EscuelaLimpiaApp PRIVATE 
+target_link_libraries(appecologia PRIVATE 
     Qt6::Qml
     Qt6::Quick
 )
-
