@@ -30,12 +30,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ninja-build
 
-      - name: Install Qt with Modules
+      - name: Install Qt6 Movil
         uses: jurplel/install-qt-action@v4
         with:
           version: '6.7.0'
           target: 'android'
           arch: 'android_arm64_v8a'
+
       - name: Configure CMake
         run: |
           cmake -B build -G Ninja \
@@ -50,47 +51,17 @@ jobs:
             -Dandroid_sdk_build_tools_revision="34.0.0" \
             -DCMAKE_BUILD_TYPE=Debug
 
-      - name: Compile C++ Binaries
+      # Forzamos las variables globales en la terminal antes de lanzar el empaquetador nativo de Qt6
+      - name: Build Android APK Nativamente
         run: |
-          cmake --build build --target escuelamovil
-
-      - name: Prepare Android Deployment Folders
-        run: |
-          # Creamos la ruta de salida en la carpeta temporal /tmp del sistema para romper el bucle infinito
-          mkdir -p /tmp/android-build/libs/arm64-v8a
-          find build -name "libescuelamovil_arm64-v8a.so" -exec cp {} /tmp/android-build/libs/arm64-v8a/ \;
-          find build -name "libescuelamovil_arm64-v8a.so" -exec cp {} build/ \;
-
-      - name: Fix Gradle Build Tools and Licenses
-        run: |
-          sed -i '/sdk_build_tools_revision/d' build/android-escuelamovil-deployment-settings.json
-          
-          export QT_HOST_PATH="/home/runner/work/Escuelalimpia/Qt/6.7.0/gcc_64"
-          $QT_HOST_PATH/bin/androiddeployqt --input build/android-escuelamovil-deployment-settings.json --output /tmp/android-build --android-platform android-34 || true
-          
-          if [ -f "/tmp/android-build/build.gradle" ]; then
-            sed -i 's/buildToolsVersion.*/buildToolsVersion "34.0.0"/g' /tmp/android-build/build.gradle
-          fi
-          
-          mkdir -p /tmp/android-build/licenses
-          cp -r $ANDROID_HOME/licenses/* /tmp/android-build/licenses/
-
-      - name: Build Android APK Manually
-        run: |
-          export JAVA_HOME=$JAVA_HOME_17_X64
+          export ANDROID_SDK_ROOT=$ANDROID_HOME
           export ANDROID_HOME=$ANDROID_HOME
-          export ANDROID_NDK_ROOT=$ANDROID_NDK_ROOT
-          export QT_HOST_PATH="/home/runner/work/Escuelalimpia/Qt/6.7.0/gcc_64"
-          
-          $QT_HOST_PATH/bin/androiddeployqt \
-            --input build/android-escuelamovil-deployment-settings.json \
-            --output /tmp/android-build \
-            --android-platform android-34 \
-            --gradle
+          cmake --build build --target escuelamovil
+          cmake --build build --target apk
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: EscuelaLimpia-Android-APK
-          path: /tmp/android-build/**/*.apk
+          path: build/**/*.apk
           if-no-files-found: error
