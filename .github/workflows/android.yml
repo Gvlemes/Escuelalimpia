@@ -20,10 +20,10 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Install Android SDK Platform 34
+      - name: Install Android SDK Platform 33
         run: |
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-34" "build-tools;34.0.0"
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-33" "build-tools;33.0.2"
 
       - name: Install Build Tools
         run: |
@@ -42,13 +42,13 @@ jobs:
           cmake -B build -G Ninja \
             -DCMAKE_TOOLCHAIN_FILE="$ANDROID_NDK_ROOT/build/cmake/android.toolchain.cmake" \
             -DANDROID_ABI=arm64-v8a \
-            -DANDROID_PLATFORM=android-34 \
+            -DANDROID_PLATFORM=android-33 \
             -DCMAKE_PREFIX_PATH="${{ env.QT_ROOT_DIR }}" \
             -DCMAKE_FIND_ROOT_PATH="${{ env.QT_ROOT_DIR }}" \
             -DQT_ANDROID_SDK_ROOT="$ANDROID_HOME" \
             -DQT_ANDROID_NDK_ROOT="$ANDROID_NDK_ROOT" \
-            -DQT_ANDROID_SDK_BUILD_TOOLS_REVISION="34.0.0" \
-            -Dandroid_sdk_build_tools_revision="34.0.0" \
+            -DQT_ANDROID_SDK_BUILD_TOOLS_REVISION="33.0.2" \
+            -Dandroid_sdk_build_tools_revision="33.0.2" \
             -DCMAKE_BUILD_TYPE=Debug
 
       - name: Compile C++ Binaries
@@ -59,16 +59,15 @@ jobs:
         run: |
           sed -i '/sdk_build_tools_revision/d' build/android-escuelamovil-deployment-settings.json
           
-          # Buscador universal inteligente para copiar el binario compilado al build de Android
           mkdir -p build/android-build/libs/arm64-v8a
           find build -name "libescuelamovil_arm64-v8a.so" -exec cp {} build/android-build/libs/arm64-v8a/ \;
           find build -name "libescuelamovil_arm64-v8a.so" -exec cp {} build/ \;
           
           export QT_HOST_PATH="/home/runner/work/Escuelalimpia/Qt/6.7.0/gcc_64"
-          $QT_HOST_PATH/bin/androiddeployqt --input build/android-escuelamovil-deployment-settings.json --output build/android-build --android-platform android-34 || true
+          $QT_HOST_PATH/bin/androiddeployqt --input build/android-escuelamovil-deployment-settings.json --output build/android-build --android-platform android-33 || true
           
           if [ -f "build/android-build/build.gradle" ]; then
-            sed -i 's/buildToolsVersion.*/buildToolsVersion "34.0.0"/g' build/android-build/build.gradle
+            sed -i 's/buildToolsVersion.*/buildToolsVersion "33.0.2"/g' build/android-build/build.gradle
           fi
           
           mkdir -p build/android-build/licenses
@@ -84,7 +83,7 @@ jobs:
           $QT_HOST_PATH/bin/androiddeployqt \
             --input build/android-escuelamovil-deployment-settings.json \
             --output build/android-build \
-            --android-platform android-34 \
+            --android-platform android-33 \
             --gradle
 
       - name: Upload APK Artifact
