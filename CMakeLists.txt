@@ -14,6 +14,11 @@ add_executable(appecologia
     main.cpp
 )
 
+# Forzamos a que el binario se guarde fuera de la carpeta de recursos de Qt
+set_target_properties(appecologia PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+)
+
 qt_add_qml_module(appecologia
     URI appecologia
     VERSION 1.0
