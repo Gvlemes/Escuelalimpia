@@ -33,6 +33,3 @@ target_link_libraries(escuelamovil PRIVATE
 set_property(TARGET escuelamovil PROPERTY
     QT_ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}"
 )
-
-# MACRO CLAVE: Genera la APK de depuración autofirmada de forma nativa al compilar
-qt_finalize_target(escuelamovil)
