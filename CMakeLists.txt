@@ -10,13 +10,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Qml Quick)
 
-add_executable(appecologia
+# Macro oficial de Qt6 que gestiona los ejecutables móviles sin colisión de directorios
+qt_add_executable(appecologia
     main.cpp
-)
-
-# Forzamos a que el binario se guarde fuera de la carpeta de recursos de Qt
-set_target_properties(appecologia PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
 )
 
 qt_add_qml_module(appecologia
