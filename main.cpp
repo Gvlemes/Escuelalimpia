@@ -7,7 +7,6 @@
 #include <QDir>
 
 void inicializarBaseDatosMovil() {
-    // Busca la ruta segura de almacenamiento de la app en Android
     QString rutaAlmacenamiento = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     QDir dir(rutaAlmacenamiento);
     if (!dir.exists()) {
@@ -31,11 +30,11 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
-    // Inicializamos la BD en C++ de forma segura antes de cargar la UI
     inicializarBaseDatosMovil();
 
     QQmlApplicationEngine engine;
-    const QUrl url(QStringLiteral("qrc:/appecologia/main.qml"));
+    // Apunta al nuevo URI definido en el CMakeLists
+    const QUrl url(QStringLiteral("qrc:/escuelamovil/main.qml"));
     
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
         &app, [url](QObject *obj, const QUrl &objUrl) {
