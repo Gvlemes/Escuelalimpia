@@ -7,7 +7,8 @@
 #include <QDir>
 
 void inicializarBaseDatosMovil() {
-    QString rutaAlmacenamiento = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    // Usamos la ruta de caché temporal que Android 14 nunca bloquea
+    QString rutaAlmacenamiento = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
     QDir dir(rutaAlmacenamiento);
     if (!dir.exists()) {
         dir.mkpath(rutaAlmacenamiento);
