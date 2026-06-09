@@ -47,9 +47,11 @@ jobs:
             -DCMAKE_FIND_ROOT_PATH="${{ env.QT_ROOT_DIR }}" \
             -DQT_ANDROID_SDK_ROOT="$ANDROID_HOME" \
             -DQT_ANDROID_NDK_ROOT="$ANDROID_NDK_ROOT" \
+            -DQT_ANDROID_SDK_BUILD_TOOLS_REVISION="34.0.0" \
+            -Dandroid_sdk_build_tools_revision="34.0.0" \
             -DCMAKE_BUILD_TYPE=Debug
 
-      # Compila el código C++ y genera el archivo .apk final de manera directa y segura
+      # Compila la app y empaqueta el APK de forma nativa usando las herramientas del SDK enlazadas
       - name: Build Android APK
         run: |
           cmake --build build --target escuelamovil
