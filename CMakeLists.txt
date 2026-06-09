@@ -28,14 +28,3 @@ target_link_libraries(escuelamovil PRIVATE
     Qt6::Quick
     Qt6::Sql
 )
-
-# INYECCIÓN CRUCIAL: Forzamos a Qt a leer la ruta del SDK de los servidores de GitHub de forma interna
-if(DEFINED ENV{ANDROID_HOME})
-    set(QT_ANDROID_SDK_ROOT "$ENV{ANDROID_HOME}" CACHE STRING "Android SDK Root")
-    set(ANDROID_SDK_ROOT "$ENV{ANDROID_HOME}" CACHE STRING "Android SDK Root")
-endif()
-
-# Configura automáticamente el paquete de Android (Manifiesto de permisos)
-set_property(TARGET escuelamovil PROPERTY
-    QT_ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}"
-)
