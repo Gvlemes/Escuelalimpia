@@ -37,7 +37,7 @@ jobs:
           target: 'android'
           arch: 'android_arm64_v8a'
 
-      # PASO CONFIGURADO: Forzamos la compilación externa y la revisión exacta de build-tools 34.0.0
+      # PASO DEPURADO: Quitamos los flags que causaban la revision vacia e invalida en Gradle
       - name: Configure CMake Externamente
         run: |
           cmake -B /tmp/build_app -G Ninja \
@@ -48,11 +48,9 @@ jobs:
             -DCMAKE_FIND_ROOT_PATH="${{ env.QT_ROOT_DIR }}" \
             -DQT_ANDROID_SDK_ROOT="$ANDROID_HOME" \
             -DQT_ANDROID_NDK_ROOT="$ANDROID_NDK_ROOT" \
-            -DQT_ANDROID_SDK_BUILD_TOOLS_REVISION="34.0.0" \
-            -Dandroid_sdk_build_tools_revision="34.0.0" \
             -DCMAKE_BUILD_TYPE=Debug
 
-      # Compila y empaqueta nativamente usando la ruta externa limpia de Linux
+      # Compila y empaqueta de forma automatica y nativa heredando las rutas limpias del servidor
       - name: Build Android APK
         run: |
           cmake --build /tmp/build_app --target escuelamovil
