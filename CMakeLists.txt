@@ -10,12 +10,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Qml Quick Sql)
 
-# Creamos el ejecutable móvil nativo
 qt_add_executable(escuelamovil
     main.cpp
 )
 
-# Mapeamos el archivo de interfaz táctil
 qt_add_qml_module(escuelamovil
     URI escuelamovil
     VERSION 1.0
@@ -29,7 +27,6 @@ target_link_libraries(escuelamovil PRIVATE
     Qt6::Sql
 )
 
-# Configura automáticamente el paquete de Android (Manifiesto y Estructura)
 set_property(TARGET escuelamovil PROPERTY
     QT_ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}"
 )
