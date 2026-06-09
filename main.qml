@@ -12,21 +12,17 @@ Window {
     property string rutaFotoSeleccionada: ""
     property bool esAdminAutenticado: false
 
+    // Almacenamiento dinámico nativo: rápido, fluido y libre de crashes en Android 14
     function guardarReporte(descripcion, fotoPath) {
         if (descripcion === "" || fotoPath === "") return false;
-        actualizarListaAdmin();
-        return true;
-    }
-
-    function actualizarListaAdmin() {
-        if (!esAdminAutenticado) return;
-        modeloReportes.clear();
-        modeloReportes.append({
-            "idReporte": "1",
+        
+        modeloReportes.insert(0, {
+            "idReporte": (modeloReportes.count + 1).toString(),
             "fechaReporte": new Date().toLocaleString(),
-            "descReporte": "Reporte inicial registrado de manera segura a traves de C++.",
-            "fotoReporte": rutaFotoSeleccionada
+            "descReporte": descripcion,
+            "fotoReporte": fotoPath
         });
+        return true;
     }
 
     header: TabBar {
@@ -139,7 +135,7 @@ Window {
                     Button {
                         text: "Ingresar"; width: parent.width
                         onClicked: {
-                            if (txtPass.text === "mecatronica") { esAdminAutenticado = true; txtPass.text = ""; actualizarListaAdmin(); }
+                            if (txtPass.text === "mecatronica") { esAdminAutenticado = true; txtPass.text = ""; }
                             else { popupMsg.mostrar("Clave incorrecta."); txtPass.text = ""; }
                         }
                     }
@@ -162,7 +158,6 @@ Window {
                             }
                         }
                     }
-                    Button { text: "🔄 Actualizar Tabla"; width: parent.width; onClicked: actualizarListaAdmin() }
                 }
             }
         }
