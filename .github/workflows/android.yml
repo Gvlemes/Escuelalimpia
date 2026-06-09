@@ -36,6 +36,7 @@ jobs:
           version: '6.7.0'
           target: 'android'
           arch: 'android_arm64_v8a'
+
       - name: Configure CMake
         run: |
           cmake -B build -G Ninja \
@@ -52,20 +53,20 @@ jobs:
 
       - name: Compile C++ Binaries
         run: |
-          cmake --build build --target EscuelaLimpiaApp
+          cmake --build build --target appecologia
 
       - name: Prepare Android Deployment Folders
         run: |
           mkdir -p android
           mkdir -p build/android-build/libs/arm64-v8a
-          cp build/libEscuelaLimpiaApp_arm64-v8a.so build/android-build/libs/arm64-v8a/
+          cp build/libappecologia_arm64-v8a.so build/android-build/libs/arm64-v8a/
 
       - name: Fix Gradle Build Tools and Licenses
         run: |
-          sed -i '/sdk_build_tools_revision/d' build/android-EscuelaLimpiaApp-deployment-settings.json
+          sed -i '/sdk_build_tools_revision/d' build/android-appecologia-deployment-settings.json
           
           export QT_HOST_PATH="/home/runner/work/Escuelalimpia/Qt/6.7.0/gcc_64"
-          $QT_HOST_PATH/bin/androiddeployqt --input build/android-EscuelaLimpiaApp-deployment-settings.json --output build/android-build --android-platform android-34 || true
+          $QT_HOST_PATH/bin/androiddeployqt --input build/android-appecologia-deployment-settings.json --output build/android-build --android-platform android-34 || true
           
           if [ -f "build/android-build/build.gradle" ]; then
             sed -i 's/buildToolsVersion.*/buildToolsVersion "34.0.0"/g' build/android-build/build.gradle
@@ -82,7 +83,7 @@ jobs:
           export QT_HOST_PATH="/home/runner/work/Escuelalimpia/Qt/6.7.0/gcc_64"
           
           $QT_HOST_PATH/bin/androiddeployqt \
-            --input build/android-EscuelaLimpiaApp-deployment-settings.json \
+            --input build/android-appecologia-deployment-settings.json \
             --output build/android-build \
             --android-platform android-34 \
             --gradle
