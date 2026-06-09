@@ -51,11 +51,10 @@ jobs:
             -Dandroid_sdk_build_tools_revision="34.0.0" \
             -DCMAKE_BUILD_TYPE=Debug
 
-      # Inyectamos de forma estricta las rutas de Android en la misma línea del disparador de CMake 👇
       - name: Build Android APK Nativamente
         run: |
           cmake --build build --target escuelamovil
-          ANDROID_HOME=$ANDROID_HOME ANDROID_SDK_ROOT=$ANDROID_HOME cmake --build build --target apk
+          cmake --build build --target apk
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
