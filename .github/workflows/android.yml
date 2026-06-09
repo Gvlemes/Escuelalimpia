@@ -30,7 +30,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ninja-build
 
-      - name: Install Qt with Modules
+      - name: Install Qt6 Movil
         uses: jurplel/install-qt-action@v4
         with:
           version: '6.7.0'
@@ -51,7 +51,6 @@ jobs:
             -Dandroid_sdk_build_tools_revision="34.0.0" \
             -DCMAKE_BUILD_TYPE=Debug
 
-      # El compilador de Qt genera la APK de forma nativa e inyecta las licencias automáticamente
       - name: Build Android APK
         run: |
           cmake --build build --target appecologia
