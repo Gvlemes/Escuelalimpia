@@ -8,15 +8,13 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets Sql)
+find_package(Qt6 REQUIRED COMPONENTS Qml Quick)
 
 add_executable(EscuelaLimpia
     main.cpp
-    mainwindow.cpp
-    mainwindow.h
 )
 
-target_link_libraries(EscuelaLimpia PRIVATE
-    Qt6::Widgets
-    Qt6::Sql
+target_link_libraries(EscuelaLimpia PRIVATE 
+    Qt6::Qml
+    Qt6::Quick
 )
