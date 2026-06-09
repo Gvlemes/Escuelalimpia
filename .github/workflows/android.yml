@@ -47,44 +47,13 @@ jobs:
             -DCMAKE_FIND_ROOT_PATH="${{ env.QT_ROOT_DIR }}" \
             -DQT_ANDROID_SDK_ROOT="$ANDROID_HOME" \
             -DQT_ANDROID_NDK_ROOT="$ANDROID_NDK_ROOT" \
-            -DQT_ANDROID_SDK_BUILD_TOOLS_REVISION="34.0.0" \
-            -Dandroid_sdk_build_tools_revision="34.0.0" \
             -DCMAKE_BUILD_TYPE=Debug
 
-      - name: Compile C++ Binaries
+      # Compila el código C++ y genera el archivo .apk final de manera directa y segura
+      - name: Build Android APK
         run: |
           cmake --build build --target escuelamovil
-
-      - name: Fix Gradle Build Tools and Licenses
-        run: |
-          sed -i '/sdk_build_tools_revision/d' build/android-escuelamovil-deployment-settings.json
-          
-          mkdir -p build/android-build/libs/arm64-v8a
-          find build -name "libescuelamovil_arm64-v8a.so" -exec cp {} build/android-build/libs/arm64-v8a/ \;
-          find build -name "libescuelamovil_arm64-v8a.so" -exec cp {} build/ \;
-          
-          export QT_HOST_PATH="/home/runner/work/Escuelalimpia/Qt/6.7.0/gcc_64"
-          $QT_HOST_PATH/bin/androiddeployqt --input build/android-escuelamovil-deployment-settings.json --output build/android-build --android-platform android-34 || true
-          
-          if [ -f "build/android-build/build.gradle" ]; then
-            sed -i 's/buildToolsVersion.*/buildToolsVersion "34.0.0"/g' build/android-build/build.gradle
-          fi
-          
-          mkdir -p build/android-build/licenses
-          cp -r $ANDROID_HOME/licenses/* build/android-build/licenses/
-
-      - name: Build Android APK Manually
-        run: |
-          export JAVA_HOME=$JAVA_HOME_17_X64
-          export ANDROID_HOME=$ANDROID_HOME
-          export ANDROID_NDK_ROOT=$ANDROID_NDK_ROOT
-          export QT_HOST_PATH="/home/runner/work/Escuelalimpia/Qt/6.7.0/gcc_64"
-          
-          $QT_HOST_PATH/bin/androiddeployqt \
-            --input build/android-escuelamovil-deployment-settings.json \
-            --output build/android-build \
-            --android-platform android-34 \
-            --gradle
+          cmake --build build --target apk
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
