@@ -16,6 +16,7 @@
                   android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <!-- Línea corregida con su atributo 'name' obligatorio 👇 -->
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
