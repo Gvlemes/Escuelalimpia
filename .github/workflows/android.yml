@@ -1,0 +1,32 @@
+name: Compilar APK Android - EscuelaLimpia
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar codigo de la App
+        uses: actions/checkout@v3
+
+      - name: Instalar Qt6 y Herramientas Android
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: '6.5.3'
+          target: 'android'
+
+      - name: Configurar e Inicializar Android SDK
+        uses: android-actions/setup-android@v2
+
+      - name: Compilar Proyecto con CMake y generar APK
+        run: |
+          mkdir build && cd build
+          cmake -DCMAKE_TOOLCHAIN_FILE=${ANDROID_NDK_ROOT}/build/cmake/android.toolchain.cmake \
+                -DANDROID_ABI=arm64-v8a \
+                -DQT_HOST_PATH=${Qt6_DIR} ..
+          make
+
+      - name: Subir APK final para descargar
+        uses: actions/upload-artifact@v3
+        with:
+          name: EscuelaLimpia-Android
+          path: build/**/*.apk
