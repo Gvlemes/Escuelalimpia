@@ -37,7 +37,7 @@ jobs:
           target: 'android'
           arch: 'android_arm64_v8a'
 
-            - name: Configure CMake
+      - name: Configure CMake
         run: |
           cmake -B build -G Ninja \
             -DCMAKE_TOOLCHAIN_FILE="$ANDROID_NDK_ROOT/build/cmake/android.toolchain.cmake" \
@@ -48,3 +48,15 @@ jobs:
             -DQT_ANDROID_SDK_ROOT="$ANDROID_HOME" \
             -DQT_ANDROID_NDK_ROOT="$ANDROID_NDK_ROOT" \
             -DCMAKE_BUILD_TYPE=Debug
+
+      - name: Build Android APK
+        run: |
+          cmake --build build --target EscuelaLimpia
+          cmake --build build --target apk
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: EscuelaLimpia-Android-APK
+          path: build/**/*.apk
+          if-no-files-found: error
