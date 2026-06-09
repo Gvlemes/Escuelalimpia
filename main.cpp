@@ -33,7 +33,6 @@ int main(int argc, char *argv[])
     inicializarBaseDatosMovil();
 
     QQmlApplicationEngine engine;
-    // Apunta al nuevo URI definido en el CMakeLists
     const QUrl url(QStringLiteral("qrc:/escuelamovil/main.qml"));
     
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
