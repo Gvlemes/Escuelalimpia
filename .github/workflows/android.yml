@@ -59,6 +59,11 @@ jobs:
         run: |
           sed -i '/sdk_build_tools_revision/d' build/android-appecologia-deployment-settings.json
           
+          # --- CORRECCIÓN CRUCIAL DE RUTA DE BINARIO 👇 ---
+          mkdir -p build/android-build/libs/arm64-v8a
+          cp build/appecologia/libappecologia_arm64-v8a.so build/android-build/libs/arm64-v8a/
+          cp build/appecologia/libappecologia_arm64-v8a.so build/
+          
           export QT_HOST_PATH="/home/runner/work/Escuelalimpia/Qt/6.7.0/gcc_64"
           $QT_HOST_PATH/bin/androiddeployqt --input build/android-appecologia-deployment-settings.json --output build/android-build --android-platform android-34 || true
           
