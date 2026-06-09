@@ -57,9 +57,9 @@ jobs:
 
       - name: Prepare Android Deployment Folders
         run: |
-          # Creamos la carpeta de salida fuera de build pero dentro del proyecto de forma controlada
-          mkdir -p build_android/libs/arm64-v8a
-          find build -name "libescuelamovil_arm64-v8a.so" -exec cp {} build_android/libs/arm64-v8a/ \;
+          # Creamos la carpeta en /tmp, totalmente aislada para romper el bucle infinito
+          mkdir -p /tmp/build_apk_final/libs/arm64-v8a
+          find build -name "libescuelamovil_arm64-v8a.so" -exec cp {} /tmp/build_apk_final/libs/arm64-v8a/ \;
           find build -name "libescuelamovil_arm64-v8a.so" -exec cp {} build/ \;
 
       - name: Fix Gradle Build Tools and Licenses
@@ -67,14 +67,14 @@ jobs:
           sed -i '/sdk_build_tools_revision/d' build/android-escuelamovil-deployment-settings.json
           
           export QT_HOST_PATH="/home/runner/work/Escuelalimpia/Qt/6.7.0/gcc_64"
-          $QT_HOST_PATH/bin/androiddeployqt --input build/android-escuelamovil-deployment-settings.json --output build_android --android-platform android-34 || true
+          $QT_HOST_PATH/bin/androiddeployqt --input build/android-escuelamovil-deployment-settings.json --output /tmp/build_apk_final --android-platform android-34 || true
           
-          if [ -f "build_android/build.gradle" ]; then
-            sed -i 's/buildToolsVersion.*/buildToolsVersion "34.0.0"/g' build_android/build.gradle
+          if [ -f "/tmp/build_apk_final/build.gradle" ]; then
+            sed -i 's/buildToolsVersion.*/buildToolsVersion "34.0.0"/g' /tmp/build_apk_final/build.gradle
           fi
           
-          mkdir -p build_android/licenses
-          cp -r $ANDROID_HOME/licenses/* build_android/licenses/
+          mkdir -p /tmp/build_apk_final/licenses
+          cp -r $ANDROID_HOME/licenses/* /tmp/build_apk_final/licenses/
 
       - name: Build Android APK Manually
         run: |
@@ -85,7 +85,7 @@ jobs:
           
           $QT_HOST_PATH/bin/androiddeployqt \
             --input build/android-escuelamovil-deployment-settings.json \
-            --output build_android \
+            --output /tmp/build_apk_final \
             --android-platform android-34 \
             --gradle
 
@@ -93,5 +93,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: EscuelaLimpia-Android-APK
-          path: build_android/**/*.apk
+          path: /tmp/build_apk_final/**/*.apk
           if-no-files-found: error
