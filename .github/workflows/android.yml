@@ -53,19 +53,18 @@ jobs:
 
       - name: Compile C++ Binaries
         run: |
-          cmake --build build --target appecologia
+          cmake --build build --target escuelamovil
 
       - name: Fix Gradle Build Tools and Licenses
         run: |
-          sed -i '/sdk_build_tools_revision/d' build/android-appecologia-deployment-settings.json
+          sed -i '/sdk_build_tools_revision/d' build/android-escuelamovil-deployment-settings.json
           
-          # --- BUSCADOR UNIVERSAL DE BINARIOS SEGURO 👇 ---
           mkdir -p build/android-build/libs/arm64-v8a
-          find build -name "libappecologia_arm64-v8a.so" -exec cp {} build/android-build/libs/arm64-v8a/ \;
-          find build -name "libappecologia_arm64-v8a.so" -exec cp {} build/ \;
+          find build -name "libescuelamovil_arm64-v8a.so" -exec cp {} build/android-build/libs/arm64-v8a/ \;
+          find build -name "libescuelamovil_arm64-v8a.so" -exec cp {} build/ \;
           
           export QT_HOST_PATH="/home/runner/work/Escuelalimpia/Qt/6.7.0/gcc_64"
-          $QT_HOST_PATH/bin/androiddeployqt --input build/android-appecologia-deployment-settings.json --output build/android-build --android-platform android-34 || true
+          $QT_HOST_PATH/bin/androiddeployqt --input build/android-escuelamovil-deployment-settings.json --output build/android-build --android-platform android-34 || true
           
           if [ -f "build/android-build/build.gradle" ]; then
             sed -i 's/buildToolsVersion.*/buildToolsVersion "34.0.0"/g' build/android-build/build.gradle
@@ -82,7 +81,7 @@ jobs:
           export QT_HOST_PATH="/home/runner/work/Escuelalimpia/Qt/6.7.0/gcc_64"
           
           $QT_HOST_PATH/bin/androiddeployqt \
-            --input build/android-appecologia-deployment-settings.json \
+            --input build/android-escuelamovil-deployment-settings.json \
             --output build/android-build \
             --android-platform android-34 \
             --gradle
