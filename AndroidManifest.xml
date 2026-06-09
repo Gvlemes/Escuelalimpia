@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://android.com"
+          package="com.mecatronica.escuelalimpia"
+          android:versionCode="1"
+          android:versionName="1.0">
+
+    <application android:label="Escuela Limpia" 
+                 android:allowBackup="true"
+                 android:hasCode="true">
+                 
+        <activity android:name="org.qtproject.qt.android.bindings.QtActivity"
+                  android:label="Escuela Limpia"
+                  android:configChanges="orientation|uiMode|screenSize|screenLayout|hardKeyboardHidden|keyboardHidden"
+                  android:launchMode="singleTop"
+                  android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            
+            <!-- Meta-datos obligatorios para que Qt6 inicialice la base de datos de fondo -->
+            <meta-data android:name="android.app.lib_name" android:value="escuelamovil" />
+        </activity>
+    </application>
+</manifest>
