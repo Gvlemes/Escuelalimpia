@@ -37,7 +37,7 @@ jobs:
           target: 'android'
           arch: 'android_arm64_v8a'
 
-      # PASO DEPURADO: Quitamos los flags que causaban la revision vacia e invalida en Gradle
+      # Configuración de compilación en un directorio aislado /tmp para romper bucles
       - name: Configure CMake Externamente
         run: |
           cmake -B /tmp/build_app -G Ninja \
@@ -50,15 +50,16 @@ jobs:
             -DQT_ANDROID_NDK_ROOT="$ANDROID_NDK_ROOT" \
             -DCMAKE_BUILD_TYPE=Debug
 
-      # Compila y empaqueta de forma automatica y nativa heredando las rutas limpias del servidor
+      # Compila y empaqueta nativamente usando la ruta externa limpia de Linux
       - name: Build Android APK
         run: |
           cmake --build /tmp/build_app --target escuelamovil
           cmake --build /tmp/build_app --target apk
 
+      # PASO CORREGIDO: Ruta de empaquetado profundo de Gradle para Qt 6.7.0
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: EscuelaLimpia-Android-APK
-          path: /tmp/build_app/**/*.apk
+          path: /tmp/build_app/android-build/**/*.apk
           if-no-files-found: error
