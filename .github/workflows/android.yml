@@ -51,8 +51,15 @@ jobs:
             -Dandroid_sdk_build_tools_revision="34.0.0" \
             -DCMAKE_BUILD_TYPE=Debug
 
-      # Compila la app y empaqueta el APK inyectando la propiedad nativa del SDK de Qt
+      # Compila la app y genera el APK inyectando las variables directo al entorno del proceso de Linux
       - name: Build Android APK
         run: |
           cmake --build build --target escuelamovil
-          cmake --build build --target apk -- -d QT_ANDROID_SDK_ROOT=$ANDROID_HOME
+          env QT_ANDROID_SDK_ROOT=$ANDROID_HOME ANDROID_SDK_ROOT=$ANDROID_HOME ANDROID_HOME=$ANDROID_HOME cmake --build build --target apk
+          
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: EscuelaLimpia-Android-APK
+          path: build/**/*.apk
+          if-no-files-found: error
