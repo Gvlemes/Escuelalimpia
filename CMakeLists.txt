@@ -14,6 +14,14 @@ add_executable(EscuelaLimpia
     main.cpp
 )
 
+# Mapeo obligatorio para indicarle a Android dónde está tu diseño táctil
+qt_add_qml_module(EscuelaLimpia
+    URI EscuelaLimpia
+    VERSION 1.0
+    QML_FILES
+        main.qml
+)
+
 target_link_libraries(EscuelaLimpia PRIVATE 
     Qt6::Qml
     Qt6::Quick
