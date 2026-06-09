@@ -13,15 +13,27 @@ ApplicationWindow {
     property var db: null
     property bool esAdminAutenticado: false
 
-    Component.onCompleted: {
-        db = LocalStorage.openDatabaseSync("EscuelaLimpiaDB", "1.0", "BD Escolar", 100000);
-        db.transaction(function(tx) {
-            tx.executeSql('CREATE TABLE IF NOT EXISTS reportes(id INTEGER PRIMARY KEY AUTOINCREMENT, fecha TEXT, descripcion TEXT, foto TEXT)');
-        });
+    // Temporizador seguro para dar tiempo a Android de inicializar la pantalla
+    Timer {
+        id: initTimer
+        interval: 500
+        running: true
+        repeat: false
+        onTriggered: {
+            try {
+                db = LocalStorage.openDatabaseSync("EscuelaLimpiaDB", "1.0", "BD Escolar", 100000);
+                db.transaction(function(tx) {
+                    tx.executeSql('CREATE TABLE IF NOT EXISTS reportes(id INTEGER PRIMARY KEY AUTOINCREMENT, fecha TEXT, descripcion TEXT, foto TEXT)');
+                });
+                console.log("Base de datos inicializada con éxito.");
+            } catch (err) {
+                console.log("Error al abrir la BD: " + err);
+            }
+        }
     }
 
     function guardarReporte(descripcion, fotoPath) {
-        if (descripcion === "" || fotoPath === "") return false;
+        if (!db || descripcion === "" || fotoPath === "") return false;
         db.transaction(function(tx) {
             var fechaActual = new Date().toISOString().replace('T', ' ').substr(0, 19);
             tx.executeSql('INSERT INTO reportes (fecha, descripcion, foto) VALUES (?, ?, ?)', [fechaActual, descripcion, fotoPath]);
@@ -31,7 +43,7 @@ ApplicationWindow {
     }
 
     function actualizarListaAdmin() {
-        if (!esAdminAutenticado) return;
+        if (!esAdminAutenticado || !db) return;
         modeloReportes.clear();
         db.transaction(function(tx) {
             var rs = tx.executeSql('SELECT id, fecha, descripcion, foto FROM reportes ORDER BY id DESC');
